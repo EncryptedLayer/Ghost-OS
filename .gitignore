@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Framework and build output
+.next/
+dist/
+build/
+coverage/
+.turbo/
+.vercel/
+
+# Local logs and caches
+logs/
+*.log
+.DS_Store
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Private and internal directories
+private/
+server/
+backend/
+api/
+infra/
+prisma/
+migrations/
+database/
+secrets/
+keys/
+wallets/
+prompts/internal/
+admin/
+services/wallet-signer/
+services/executor/
+services/risk-engine/
+services/auth/
+services/payment/
+services/mcp/
+
+# Internal scripts
+scripts/deploy*
+scripts/admin*
