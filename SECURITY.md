@@ -1,69 +1,35 @@
 # Security Policy
 
-## Transaction Safety
+## Reporting a vulnerability
 
-Ghost Layer does not store private keys, ask for seed phrases, or execute silent trades.
+If you believe you have found a security issue in Ghost OS, please report it privately.
 
-All execution flows require:
+- **Email:** [support@encryptedlayer.org](mailto:support@encryptedlayer.org?subject=Security%20report) with "Security report" in the subject
+- **Include:** the affected page or endpoint, steps to reproduce, and the impact you observed
+- **Alternative:** a direct message to [@TryGhostOS](https://x.com/TryGhostOS) on X
 
-- Validated user intent
-- Real quote provider response
-- Manual confirmation card
-- Wallet-side signing
-- Real transaction hash/signature tracking
+Please **do not** open a public GitHub issue, or post details in Discord or on social media, until the issue is fixed.
 
-## API Safety
+## Good-faith research
 
-- API routes use Zod validation.
-- API keys are server-only environment variables.
-- State-changing API calls are blocked by a same-origin CSRF/origin check in middleware.
-- Security headers are applied globally, including CSP, frame blocking, content sniffing protection, referrer policy, permissions policy, and production HSTS.
-- API errors are sanitized in production so raw provider, database, or stack messages are not leaked to users.
-- Rate limiting is implemented with a local fallback and a Redis/Upstash TODO for multi-instance production.
-- Trade routes are split into quote, prepare, execute, and track.
-- Server-side EVM execution is forbidden by design.
+We welcome good-faith security research and will not pursue claims against research that:
 
-## OWASP Top 10 Hardening
+- uses only your own accounts and wallets, or test accounts you created;
+- does not access, change or move anyone else's data or funds, and stops as soon as the issue is demonstrated;
+- does not degrade the service, for example through denial-of-service or high-volume automated testing; and
+- keeps details confidential until the issue is resolved.
 
-Ghost OS is a web dashboard plus cloud-connected crypto command layer, so these controls are required before public launch:
+## Scope
 
-- Broken access control: protected app routes require a signed session; Ghost Brain admin APIs require `GHOST_ADMIN_USER_IDS`, `GHOST_ADMIN_EMAILS`, or `GHOST_ADMIN_WALLETS`.
-- Injection: request bodies are validated with Zod; Prisma parameterization is used for database writes; never concatenate user input into SQL.
-- XSS: React escaping is used by default; no `dangerouslySetInnerHTML` should be introduced; CSP blocks untrusted script/object/frame execution.
-- CSRF: non-GET API requests must come from an allowed origin.
-- SSRF: backend integrations must use fixed provider base URLs only; never fetch arbitrary user-submitted URLs.
-- Insecure deserialization: JSON parsing must be schema-validated before use.
-- Vulnerable dependencies: run `npm audit --omit=dev` before release and pin package updates through review.
-- Authentication flaws: sessions use signed HTTP-only cookies; production requires `SESSION_SECRET`, `[sensitive configuration value]`, Firebase domain allowlisting, and secure cookies over HTTPS.
-- Logging failures: execution, auth, policy, and wallet actions should write audit logs without secrets or private user content.
-- Misconfiguration: `.env.example` must contain placeholders only; production must set `NODE_ENV=production`, HTTPS, HSTS, and provider-missing states.
+In scope: ghostos.network and the Ghost OS app.
 
-## Admin Access
+Out of scope: third-party services Ghost OS integrates with (wallets, RPC providers, routers, bridges, data providers), which have their own disclosure programmes; social engineering; physical attacks; and findings that require a compromised user device.
 
-Set at least one admin allowlist variable before using `/settings/ghost-brain`:
+## What Ghost OS guarantees
 
-```env
-GHOST_ADMIN_USER_IDS=
-GHOST_ADMIN_EMAILS=
-GHOST_ADMIN_WALLETS=
-```
+- Ghost OS never asks for seed phrases.
+- Ghost Wallet keys are encrypted at rest, used only to sign actions you approved or your own execution policy allows, and never sent to the browser or to any AI provider.
+- In External Wallet mode, your own wallet holds your keys and signs every transaction.
+- Every action is shown before signing, and only real transaction hashes are reported.
 
-Use comma-separated values for multiple admins. Do not make every signed-in user an admin.
-
-## Wallet Verification
-
-- EVM wallet verification uses signed-message verification via Viem.
-- Solana message verification is intentionally blocked until the selected audited ed25519 verification package is added.
-
-## Known Launch Requirements
-
-- Configure `[sensitive configuration value]`.
-- Configure `SESSION_SECRET` and `[sensitive configuration value]`.
-- Configure `GHOST_ADMIN_USER_IDS` or `GHOST_ADMIN_EMAILS` for Ghost Brain admin access.
-- Configure Reown project credentials.
-- Configure swap provider keys.
-- Configure security scanner provider keys.
-- Configure production Redis rate limiting.
-- Add Sentry/Logtail monitoring.
-- Add CI dependency scanning and secret scanning.
-- Complete a third-party smart-contract and security review before enabling public real-money trading.
+More: [Security model](https://ghostos.network/docs/security#responsible-disclosure)

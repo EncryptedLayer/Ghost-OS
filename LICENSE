@@ -1,0 +1,21 @@
+Copyright (c) 2026 Encrypted Layer. All rights reserved.
+
+Ghost OS is proprietary software developed and operated by Encrypted Layer.
+
+This repository contains public information about Ghost OS: its README, release
+notes, security policy and brand assets. It does not contain the Ghost OS source
+code, and it grants no licence to the Ghost OS software, interface, design,
+documentation or brand.
+
+You may read, link to and quote short passages from this repository for
+commentary, review, research and reporting, with attribution. Any other copying,
+redistribution, modification or commercial use of its contents requires prior
+written permission from Encrypted Layer.
+
+The Ghost OS name and logo are trademarks of Encrypted Layer. The chain logos in
+public/chains/ belong to their respective owners and are used only to identify
+supported networks.
+
+Terms of Service: https://ghostos.network/terms
+Intellectual Property & Anti-Cloning Policy: https://ghostos.network/legal/intellectual-property
+Permissions and licensing: support@encryptedlayer.org
